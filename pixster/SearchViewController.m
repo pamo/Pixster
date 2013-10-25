@@ -80,6 +80,76 @@
     return 300;
 }
 
+
+#pragma mark - UICollectionView Datasource
+// 1
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
+//    NSString *searchTerm = self.imageResults[section];
+//    return [self.imageResults[searchTerm] count];
+    return 1;
+}
+// 2
+- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
+    return [self.imageResults count];
+}
+// 3
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    UICollectionViewCell *cell = [[UICollectionViewCell alloc] init];
+
+    UIImageView *imageView = nil;
+    const int IMAGE_TAG = 1;
+    if (cell == nil) {
+        cell = [cv dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor whiteColor];
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.tag = IMAGE_TAG;
+        [cell.contentView addSubview:imageView];
+    } else {
+        imageView = (UIImageView *)[cell.contentView viewWithTag:IMAGE_TAG];
+    }
+    
+    // Clear the previous image
+    imageView.image = nil;
+    [imageView setImageWithURL:[NSURL URLWithString:[self.imageResults[indexPath.row] valueForKeyPath:@"url"]]];
+    
+    return cell;
+
+}
+// 4
+/*- (UICollectionReusableView *)collectionView:
+ (UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+ {
+ return [[UICollectionReusableView alloc] init];
+ }*/
+
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // TODO: Select Item
+}
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    // TODO: Deselect item
+}
+
+#pragma mark – UICollectionViewDelegateFlowLayout
+
+// 1
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UIImageView *photo =  self.imageResults[indexPath.row];
+    // 2
+    CGSize retval = photo.image.size.width > 0 ? photo.image.size : CGSizeMake(100, 100);
+    retval.height += 35; retval.width += 35; return retval;
+}
+
+// 3
+- (UIEdgeInsets)collectionView:
+(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(50, 20, 50, 20);
+}
+
 #pragma mark - UISearchDisplay delegate
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
