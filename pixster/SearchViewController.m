@@ -11,7 +11,7 @@
 #import "AFNetworking.h"
 
 @interface SearchViewController ()
-
+@property(nonatomic, weak) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *imageResults;
 
 @end
@@ -31,6 +31,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"CellIdentifier"];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,68 +43,67 @@
 
 #pragma mark - UITableView data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-    return [self.imageResults count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"CellIdentifier";
-    
-    // Dequeue or create a cell of the appropriate type.
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UIImageView *imageView = nil;
-    const int IMAGE_TAG = 1;
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.tag = IMAGE_TAG;
-        [cell.contentView addSubview:imageView];
-    } else {
-        imageView = (UIImageView *)[cell.contentView viewWithTag:IMAGE_TAG];
-    }
-    
-    // Clear the previous image
-    imageView.image = nil;
-    [imageView setImageWithURL:[NSURL URLWithString:[self.imageResults[indexPath.row] valueForKeyPath:@"url"]]];
-    
-    return cell;
-}
-
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 300;
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
+//    // Return the number of sections.
+//    return 1;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
+//    return [self.imageResults count];
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    static NSString *CellIdentifier = @"CellIdentifier";
+//    
+//    // Dequeue or create a cell of the appropriate type.
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    UIImageView *imageView = nil;
+//    const int IMAGE_TAG = 1;
+//    if (cell == nil) {
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//        cell.accessoryType = UITableViewCellAccessoryNone;
+//        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+//        imageView.contentMode = UIViewContentModeScaleAspectFill;
+//        imageView.tag = IMAGE_TAG;
+//        [cell.contentView addSubview:imageView];
+//    } else {
+//        imageView = (UIImageView *)[cell.contentView viewWithTag:IMAGE_TAG];
+//    }
+//    
+//    // Clear the previous image
+//    imageView.image = nil;
+//    [imageView setImageWithURL:[NSURL URLWithString:[self.imageResults[indexPath.row] valueForKeyPath:@"url"]]];
+//    
+//    return cell;
+//}
+//
+//- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 300;
+//}
 
 
 #pragma mark - UICollectionView Datasource
 // 1
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-//    NSString *searchTerm = self.imageResults[section];
-//    return [self.imageResults[searchTerm] count];
-    return 1;
+    return [self.imageResults count];
 }
 // 2
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
-    return [self.imageResults count];
+    return 1;
 }
 // 3
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    UICollectionViewCell *cell = [[UICollectionViewCell alloc] init];
+    UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
+;
 
     UIImageView *imageView = nil;
     const int IMAGE_TAG = 1;
     if (cell == nil) {
-        cell = [cv dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
+        cell = [[UICollectionViewCell alloc] initWithFrame:CGRectMake(0,0,50,50)];
         cell.backgroundColor = [UIColor whiteColor];
-        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.tag = IMAGE_TAG;
         [cell.contentView addSubview:imageView];
@@ -154,7 +155,8 @@
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
     [self.imageResults removeAllObjects];
-    [self.searchDisplayController.searchResultsTableView reloadData];
+//    [self.searchDisplayController.searchResultsTableView reloadData];
+    [self.collectionView reloadData];
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
@@ -175,7 +177,8 @@
         if ([results isKindOfClass:[NSArray class]]) {
             [self.imageResults removeAllObjects];
             [self.imageResults addObjectsFromArray:results];
-            [self.searchDisplayController.searchResultsTableView reloadData];
+//            [self.searchDisplayController.searchResultsTableView reloadData];
+            [self.collectionView reloadData];
         }
     } failure:nil];
     

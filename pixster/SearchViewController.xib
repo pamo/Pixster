@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController">
             <connections>
+                <outlet property="collectionView" destination="UJd-oz-Xdn" id="69x-0o-ZWL"/>
                 <outlet property="searchDisplayController" destination="rT2-Z7-Qyx" id="gRW-4q-sXJ"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -24,6 +25,21 @@
                         <outlet property="delegate" destination="-1" id="Xk2-XS-ZMR"/>
                     </connections>
                 </searchBar>
+                <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="UJd-oz-Xdn">
+                    <rect key="frame" x="0.0" y="107" width="320" height="461"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IDr-9h-Gmb">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <cells/>
+                    <connections>
+                        <outlet property="dataSource" destination="rT2-Z7-Qyx" id="bmv-iS-A1k"/>
+                        <outlet property="delegate" destination="rT2-Z7-Qyx" id="ohD-eY-V4k"/>
+                    </connections>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
